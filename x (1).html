@@ -1,0 +1,382 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income & Expense Tracker</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a; /* Dark background */
+            color: #fff; /* White text */
+            margin: 0;
+        }
+
+        /* Container */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styling */
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            color: #FFCC00; /* Yellow color */
+            margin-bottom: 20px;
+        }
+
+        /* Income and Expense Sections */
+        .income-section, .expense-section {
+            background-color: #333; /* Dark gray background */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #FFCC00; /* Yellow color */
+            margin-bottom: 15px;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #222;
+        }
+
+        .form-container input:focus,
+        .form-container select:focus {
+            border-color: #FFCC00;
+        }
+
+        button {
+            background-color: #FFCC00; /* Yellow button */
+            color: #333;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e6b800; /* Slightly darker yellow on hover */
+        }
+
+        /* Summary Section */
+        .summary {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .summary p {
+            font-size: 1.2rem;
+        }
+
+        .summary span {
+            font-weight: bold;
+            color: #FFCC00; /* Yellow for balance, income, and expenses */
+        }
+
+        /* Transaction History Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #444; /* Dark header */
+            color: #FFCC00;
+        }
+
+        td {
+            background-color: #222; /* Dark table rows */
+            color: #fff;
+        }
+
+        button {
+            background-color: #FFCC00;
+            color: #333;
+            cursor: pointer;
+            border: none;
+            padding: 5px 15px;
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #e6b800;
+        }
+
+        /* Add a background image to the landing page */
+        .landing-page {
+            background-image: url('your-image-url-here.jpg'); /* Add your preferred image here */
+            background-size: cover;
+            background-position: center;
+            padding: 150px 0;
+            text-align: center;
+        }
+
+        .landing-page h1 {
+            font-size: 3rem;
+            color: #FFCC00;
+            margin-bottom: 20px;
+        }
+
+        .landing-page p {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+
+        .landing-page a {
+            background-color: #FFCC00;
+            color: #333;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .landing-page a:hover {
+            background-color: #e6b800;
+        }
+
+        /* Hide the tracker by default */
+        #tracker {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div class="landing-page">
+        <h1>Income & Expense Tracker</h1>
+        <p>Track your finances effortlessly with our easy-to-use platform</p>
+        <a href="javascript:void(0);" onclick="showTracker()">Get Started</a>
+    </div>
+
+    <!-- Tracker Page -->
+    <div class="container" id="tracker">
+        <h1>Income & Expense Tracker</h1>
+
+        <!-- Income Section -->
+        <div class="income-section">
+            <h2>Add Income</h2>
+            <div class="form-container">
+                <input type="text" id="income-name" placeholder="Name" />
+                <input type="number" id="income-amount" placeholder="Amount" />
+                <input type="date" id="income-date" placeholder="DD-MM-YYYY" />
+                <select id="income-category" onchange="handleIncomeOtherCategory()">
+                    <option value="Salary">Sales</option>
+                    <option value="Other">Other Specify</option>
+                </select>
+                <input 
+                    type="text" 
+                    id="income-other-category" 
+                    placeholder="Specify Other Category" 
+                    style="display: none;" 
+                />
+                <button onclick="addIncome()">Add Income</button>
+            </div>
+        </div>
+
+        <!-- Expense Section -->
+        <div class="expense-section">
+            <h2>Add Expense</h2>
+            <div class="form-container">
+                <input type="text" id="expense-name" placeholder="Name" />
+                <input type="number" id="expense-amount" placeholder="Amount" />
+                <input type="date" id="expense-date" placeholder="DD-MM-YYYY" />
+                <select id="expense-category" onchange="handleExpenseOtherCategory()">
+                    <option value="Food">Food</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Raw Material">Raw Material</option>
+                    <option value="Other">Other Specify</option>
+                </select>
+                <input 
+                    type="text" 
+                    id="expense-other-category" 
+                    placeholder="Specify Other Category" 
+                    style="display: none;" 
+                />
+                <button onclick="addExpense()">Add Expense</button>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <h2>Summary</h2>
+        <div class="summary">
+            <p>Total Income: ₹ <span id="total-income">0.00</span></p>
+            <p>Total Expenses: ₹ <span id="total-expenses">0.00</span></p>
+            <p>Balance: ₹ <span id="balance">0.00</span></p>
+        </div>
+
+        <!-- Transaction History Section -->
+        <h2>Transaction History</h2>
+        <table id="transaction-list">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount (₹)</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Transactions will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Function to show the tracker page and hide the landing page
+        function showTracker() {
+            document.querySelector('.landing-page').style.display = 'none';
+            document.getElementById('tracker').style.display = 'block';
+        }
+
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let totalIncome = parseFloat(localStorage.getItem('totalIncome')) || 0.00;
+        let totalExpenses = parseFloat(localStorage.getItem('totalExpenses')) || 0.00;
+
+        function updateSummary() {
+            document.getElementById('total-income').textContent = totalIncome.toFixed(2);
+            document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
+            const balance = totalIncome - totalExpenses;
+            document.getElementById('balance').textContent = balance.toFixed(2);
+        }
+
+        function displayTransactions() {
+            const transactionList = document.getElementById('transaction-list').getElementsByTagName('tbody')[0];
+            transactionList.innerHTML = '';
+
+            transactions.forEach((transaction, index) => {
+                const row = transactionList.insertRow();
+                row.insertCell(0).textContent = transaction.name;
+                row.insertCell(1).textContent = `₹${transaction.amount.toFixed(2)}`;
+                row.insertCell(2).textContent = transaction.date;
+                row.insertCell(3).textContent = transaction.type;
+                row.insertCell(4).textContent = transaction.category;
+
+                const deleteCell = row.insertCell(5);
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteTransaction(index);
+                deleteCell.appendChild(deleteButton);
+            });
+
+            updateSummary();
+        }
+
+        function handleIncomeOtherCategory() {
+            const categorySelect = document.getElementById('income-category');
+            const otherCategoryInput = document.getElementById('income-other-category');
+            if (categorySelect.value === 'Other') {
+                otherCategoryInput.style.display = 'block';
+            } else {
+                otherCategoryInput.style.display = 'none';
+            }
+        }
+
+        function handleExpenseOtherCategory() {
+            const categorySelect = document.getElementById('expense-category');
+            const otherCategoryInput = document.getElementById('expense-other-category');
+            if (categorySelect.value === 'Other') {
+                otherCategoryInput.style.display = 'block';
+            } else {
+                otherCategoryInput.style.display = 'none';
+            }
+        }
+
+        function addIncome() {
+            const name = document.getElementById('income-name').value.trim();
+            const amount = parseFloat(document.getElementById('income-amount').value);
+            const date = document.getElementById('income-date').value;
+            const categorySelect = document.getElementById('income-category');
+            const category = categorySelect.value === 'Other'
+                ? document.getElementById('income-other-category').value.trim()
+                : categorySelect.value;
+
+            if (!name || isNaN(amount) || amount <= 0 || !date || (categorySelect.value === 'Other' && !category)) {
+                alert('Please fill in all income fields correctly!');
+                return;
+            }
+
+            const newIncome = { name, amount, date, type: 'Income', category };
+            transactions.push(newIncome);
+            totalIncome += amount;
+
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('totalIncome', totalIncome);
+            displayTransactions();
+        }
+
+        function addExpense() {
+            const name = document.getElementById('expense-name').value.trim();
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+            const date = document.getElementById('expense-date').value;
+            const categorySelect = document.getElementById('expense-category');
+            const category = categorySelect.value === 'Other'
+                ? document.getElementById('expense-other-category').value.trim()
+                : categorySelect.value;
+
+            if (!name || isNaN(amount) || amount <= 0 || !date || (categorySelect.value === 'Other' && !category)) {
+                alert('Please fill in all expense fields correctly!');
+                return;
+            }
+
+            const newExpense = { name, amount, date, type: 'Expense', category };
+            transactions.push(newExpense);
+            totalExpenses += amount;
+
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('totalExpenses', totalExpenses);
+            displayTransactions();
+        }
+
+        function deleteTransaction(index) {
+            const transaction = transactions[index];
+            if (transaction.type === 'Income') {
+                totalIncome -= transaction.amount;
+                localStorage.setItem('totalIncome', totalIncome);
+            } else if (transaction.type === 'Expense') {
+                totalExpenses -= transaction.amount;
+                localStorage.setItem('totalExpenses', totalExpenses);
+            }
+
+            transactions.splice(index, 1);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            displayTransactions();
+        }
+
+        displayTransactions(); // Initial call to display transactions
+    </script>
+</body>
+</html>
